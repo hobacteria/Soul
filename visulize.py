@@ -42,8 +42,8 @@ plt.clf()
 
 
 ## 이후부터는 택배 카테고리에 따른 지도 그리기
-merged_path = '/camin1/hkkim/merged_Data'
-geo_pd_202006_LCL = gpd.read_file(merged_path+'/large_category/202006/202006_arregate_LCL.shp')
+merged_path = '/camin1/hkkim/merged_data'
+geo_pd_202006_LCL = gpd.read_file(merged_path + '/middle_category/202006/202006_arregate_MCL.shp')
 
 cat_dict = dict(zip(geo_pd_202006_LCL[['DL_GD_LCLS','DL_GD_LC_1']].drop_duplicates()['DL_GD_LCLS'],geo_pd_202006_LCL[['DL_GD_LCLS','DL_GD_LC_1']].drop_duplicates()['DL_GD_LC_1']))
 
@@ -122,6 +122,33 @@ for d in tqdm(dates):
     for cat in geo_pd['DL_GD_LC_1'].unique():
         get_figure_map(geo_pd,cat,'DL_GD_LC_1',d,folder_nm='large_category_ratio')
 
+## 인구수로 normalize 된 지도
+d = '202006'
+
+pop = pd.read_csv('./주민등록인구(연령별_동별)_20240204170058.csv',skiprows=3,na_values='-')
+pop.columns = ['gu','dong','total','201806','201906','202006','202106','202206']
+pop = pop[pop['dong'] != '소계']
+pop[pop['dong'] == '상일동']
+pop[pop['dong'] == '상일1동']
+pop[pop['dong'] == '상일2동']
+pop[pop['dong'] == '강일동']
+
+
+for d in tqdm(dates):
+    geo_pd = gpd.read_file(merged_path+'/large_category/'+d+'/'+d+'_arregate_LCL.shp')
+    len(geo_pd['ADM_NM'].unique())
+    
+    for cat in geo_pd['DL_GD_LC_1'].unique():
+        get_figure_map(geo_pd,cat,'DL_GD_LC_1',d,folder_nm='large_category')
+set(geo_pd['ADM_NM'].unique()) - set(pop['dong'].unique())
+
+
+
+
+
+
+
+
 geo_pd = []
 for d in dates:
     geo_tmp = gpd.read_file(merged_path+f'/middle_category/{d}/{d}_arregate_MCL.shp')
@@ -146,33 +173,21 @@ for d in dates:
 geo_pd_cats = geo_pd.groupby(['DL_GD_MCLS'],as_index = False)['INVC_COUNT'].sum()
 geo_pd_cats.sort_values(by='INVC_COUNT',ascending=False)[:30]
 
-기타 : 28965495
-가공식품 : 8220019
-상의 : 6895168
-음료 : 5865674
-도서/음반 : 5135983
-하의 : 4705785
-생활용품 : 4532237
-건강식품 : 4001367
-농산물 : 3839265
-신발 : 3280038
-스킨케어 : 3033087
-주방용품 : 2746464
-언더웨어 : 2509476
-원피스/점프슈트 : 2239237
-기타패션의류 : 1867327
-건강용품 : 1805066
-문구/사무용품 : 1541275
-헤어케어 : 1272083
-스마트디바이스액세서리 : 1201420
-수산 : 1106116
-바디케어 : 1081074
-반려동물 : 1007527
-클렌징 : 990026
-계절가전 : 913074
-가방 : 907277
-축산 : 846440
-기능성 : 809325
-주얼리 : 789271
-공구 : 782368
-베이스메이크업 : 766458
+
+
+
+"""living_grid_merged_df[living_grid_merged_df['SPG_INNB'].duplicated()]
+living_grid_merged_df[living_grid_merged_df['SPG_INNB'] == '1150000008045200'][['index_left','CREATE_DAT','DGM_NM','PRESENT_SN','geometry']]
+
+fig, ax = plt.subplots()
+living_grid_merged_df[living_grid_merged_df['SPG_INNB'] == '1150000008045200']['DGM_NM']
+x_range = ax.get_xlim()
+y_range = ax.get_ylim()
+living_place.iloc[[4023],:].plot(color = 'None',edgecolor = 'black',ax = ax)
+living_place.iloc[[1574],:].plot(color = 'None',edgecolor = 'red',ax = ax)
+#plt.xlim(x_range)
+#plt.ylim(y_range)
+
+plt.savefig('/home/hkkim/Soul/plot2.png')
+plt.clf()
+"""
