@@ -1,6 +1,11 @@
 *.png
 *.csv
+*.pkl
 _census_data_2022_4_bnd_dong_bnd_dong_11_2022_2022/
+_census_data_2023_bnd_dong_bnd_dong_11_2018_2023/
+_census_data_2023_bnd_dong_bnd_dong_11_2019_2023/
+_census_data_2023_bnd_dong_bnd_dong_11_2020_2023/
+_census_data_2023_bnd_dong_bnd_dong_11_2021_2023/
 merged_Data/
 CJdata_2022/
 
